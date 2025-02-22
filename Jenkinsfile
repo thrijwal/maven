@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'Jen_node1' }  // Run on Jen_node1
+    agent { label 'maven' }  // Run on Jen_node1
     environment {
         MAVEN_HOME = "/opt/maven"  // Set Maven home
     }
