@@ -20,7 +20,7 @@ pipeline {
         }
 
         stage('Maven Pipeline') {
-            agent { label 'maven' }  // All nested stages share this agent
+            agent { label 'maven' }
             stages {
                 stage('Checkout Maven Project') {
                     steps {
@@ -45,6 +45,18 @@ pipeline {
                         sh "${MAVEN_HOME}/bin/mvn test"
                     }
                 }
+                stage('SonarQube Analysis') {
+                    steps {
+                        echo "Running SonarQube analysis..."
+                        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                            sh "${MAVEN_HOME}/bin/mvn sonar:sonar " +
+                               "-Dsonar.projectKey=thrijwal " +
+                               "-Dsonar.organization=thrijwal " +
+                               "-Dsonar.host.url=https://sonarcloud.io " +
+                               "-Dsonar.login=${SONAR_TOKEN}"
+                        }
+                    }
+                }
                 stage('Deploy to GitLab') {
                     steps {
                         echo "Deploying Maven artifact to GitLab..."
@@ -62,10 +74,10 @@ pipeline {
 
     post {
         success {
-            echo "Build, Tests, and Deployment succeeded!"
+            echo "Build, Tests, SonarQube Analysis, and Deployment succeeded!"
         }
         failure {
-            echo "Build, Tests, or Deployment failed!"
+            echo "Build, Tests, SonarQube Analysis, or Deployment failed!"
         }
     }
 }
