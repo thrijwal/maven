@@ -14,7 +14,7 @@ public class App {
     }
 
     public int divide(int a, int b) {
-        if (b == 0) throw new IllegalArgumentException("Division by zero is not allowed");
+        if (b == 0) throw new IllegalArgumentException("Invalid operation");
         return a / b;
     }
 }
