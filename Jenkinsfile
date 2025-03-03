@@ -1,6 +1,10 @@
 pipeline {
     agent none
 
+    triggers {
+        githubPush()
+    }
+
     environment {
         MAVEN_HOME = "/opt/maven"
     }
