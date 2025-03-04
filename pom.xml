@@ -83,12 +83,19 @@
         </plugins>
     </build>
 
-    <!-- GitLab Package Registry Configuration -->
+    <!-- Corrected Distribution Management -->
     <distributionManagement>
+        <!-- GitLab Repository -->
         <repository>
             <id>gitlab-maven</id>
             <url>https://gitlab.com/api/v4/projects/67371524/packages/maven</url>
         </repository>
+
+        <!-- JFrog Snapshot Repository -->
+        <snapshotRepository>
+            <id>jfrog-maven</id>
+            <url>https://trial3j8up4.jfrog.io/artifactory/my-maven-v/</url>
+        </snapshotRepository>
     </distributionManagement>
 
 </project>

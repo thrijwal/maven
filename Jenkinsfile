@@ -72,13 +72,24 @@ pipeline {
                         }
                     }
                 }
+                stage('Deploy to JFrog Artifactory') {
+                    steps {
+                        echo "Deploying Maven artifact to JFrog Artifactory..."
+                        withCredentials([string(credentialsId: 'JFROG_CREDENTIALS', variable: 'JFROG_TOKEN')]) {
+                            sh "${MAVEN_HOME}/bin/mvn deploy " +
+                               "-DaltDeploymentRepository=jfrog-maven::default::${JFROG_REPO} " +
+                               "-DrepositoryId=jfrog-maven " +
+                               "-Dtoken=${JFROG_TOKEN}"
+                        }
+                    }
+                }
             }
         }
     }
 
     post {
         success {
-            echo "Build, Tests, SonarQube Analysis, and Deployment succeeded!"
+            echo "Build, Tests, SonarQube Analysis, and Deployment to GitLab and JFrog succeeded!"
         }
         failure {
             echo "Build, Tests, SonarQube Analysis, or Deployment failed!"
