@@ -7,6 +7,8 @@ pipeline {
 
     environment {
         MAVEN_HOME = "/opt/maven"
+        // Define the JFrog repository URL here
+        JFROG_REPO = "https://trial3j8up4.jfrog.io/artifactory/my-maven-v"
     }
 
     stages {
@@ -67,7 +69,6 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'GITLAB_DEPLOY', 
                                                             usernameVariable: 'GITLAB_DEPLOY_USERNAME', 
                                                             passwordVariable: 'GITLAB_DEPLOY_TOKEN')]) {
-                            // Run Maven deploy goal; distributionManagement in pom.xml should point to GitLab
                             sh "${MAVEN_HOME}/bin/mvn deploy"
                         }
                     }
