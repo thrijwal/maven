@@ -1,3 +1,5 @@
+@Library('jenkins-shared-library') _
+
 pipeline {
     agent none
 
@@ -17,23 +19,20 @@ pipeline {
                 echo "Checking out Maven repository..."
                 checkout([$class: 'GitSCM', 
                     branches: [[name: 'main']], 
-                    userRemoteConfigs: [[url: 'https://github.com/thrijwal/maven.git']]
-                ])
+                    userRemoteConfigs: [[url: 'https://github.com/thrijwal/maven.git']]])
                 sh "ls -la"
             }
         }
         stage('Build') {
             agent { label 'maven' }
             steps {
-                echo "Building Maven project..."
-                sh "${MAVEN_HOME}/bin/mvn clean package"
+                mavenBuild(MAVEN_HOME)
             }
         }
         stage('Test') {
             agent { label 'maven' }
             steps {
-                echo "Running tests..."
-                sh "${MAVEN_HOME}/bin/mvn test"
+                mavenTest(MAVEN_HOME)
             }
         }
         stage('SonarQube Analysis') {
